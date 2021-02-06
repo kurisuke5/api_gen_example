@@ -1,9 +1,9 @@
-package interfaces
+package health
 
 // GetHealthCheckRequest - health check request
 type GetHealthCheckRequest struct{}
 
 // GetHealthCheckResponse - health check response
 type GetHealthCheckResponse struct {
-	Status string `json:"status"`
+	Status int `json:"status"`
 }

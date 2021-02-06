@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
+	apiHealth "github.com/kurisuke5/api_gen_example/backend/interfaces/api/health"
 	"github.com/kurisuke5/api_gen_example/backend/interfaces/props"
 	"github.com/labstack/echo/v4"
 )
@@ -71,7 +72,10 @@ func Bootstrap(p *props.ControllerProps, e *echo.Echo, middlewareList Middleware
 
 	rootGroup := e.Group("/")
 	setMiddleware(rootGroup, "/", middleware)
-	NewRoutes(p, rootGroup, opts...)
+
+	apiHealthGroup := rootGroup.Group("api/health/")
+	setMiddleware(apiHealthGroup, "/api/health/", middleware)
+	apiHealth.NewRoutes(p, apiHealthGroup, opts...)
 }
 
 func setMiddleware(group *echo.Group, path string, list MiddlewareMap) {

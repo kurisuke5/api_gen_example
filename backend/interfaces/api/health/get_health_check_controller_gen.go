@@ -1,10 +1,15 @@
-// Package interfaces ...
+// Package health ...
 // generated version: devel
-package interfaces
+package health
 
 import (
+	"net/http"
+
+	"github.com/kurisuke5/api_gen_example/backend/domain/werror"
 	"github.com/kurisuke5/api_gen_example/backend/interfaces/props"
+	"github.com/kurisuke5/api_gen_example/backend/interfaces/wrapper"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/xerrors"
 )
 
 // GetHealthCheckController ...
@@ -28,20 +33,24 @@ func NewGetHealthCheckController(cp *props.ControllerProps) *GetHealthCheckContr
 // @Success 200 {object} GetHealthCheckResponse
 // @Failure 400 {object} wrapper.APIError
 // @Failure 500 {object} wrapper.APIError
-// @Router /health_check [GET]
+// @Router /api/health/health_check [GET]
 func (g *GetHealthCheckController) GetHealthCheck(
 	c echo.Context, req *GetHealthCheckRequest,
 ) (res *GetHealthCheckResponse, err error) {
-	// API Error Usage: github.com/kurisuke5/api_gen_example/backend/interfaces/wrapper
-	//
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest)
-	//
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest).SetError(err)
-	//
-	// body := map[string]interface{}{
-	// 	"code": http.StatusBadRequest,
-	// 	"message": "invalid request parameter.",
-	// }
-	// return nil, wrapper.NewAPIError(http.StatusBadRequest, body).SetError(err)
-	panic("require implements.") // FIXME require implements.
+	var werr *werror.ErrorResponse
+
+	ctx := c.Request().Context()
+
+	if err = g.HealthService.Check(ctx); err != nil {
+		if xerrors.As(err, &werr) {
+			return nil, wrapper.NewAPIError(werr.Status, werr).SetError(err)
+		}
+		return nil, wrapper.NewAPIError(http.StatusInternalServerError).SetError(err)
+	}
+
+	res = &GetHealthCheckResponse{
+		Status: http.StatusOK,
+	}
+
+	return res, nil
 }
