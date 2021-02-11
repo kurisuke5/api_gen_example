@@ -6,6 +6,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/golang/mock v1.4.4
+	github.com/google/go-cmp v0.5.4
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/stretchr/testify v1.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
