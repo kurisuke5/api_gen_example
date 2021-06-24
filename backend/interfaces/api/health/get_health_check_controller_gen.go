@@ -25,6 +25,9 @@ func NewGetHealthCheckController(cp *props.ControllerProps) *GetHealthCheckContr
 	return g
 }
 
+var itemCode = "itemCode"
+
+
 // GetHealthCheck ...
 // @Summary WIP
 // @Description WIP
